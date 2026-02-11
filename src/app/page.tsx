@@ -1,65 +1,131 @@
-import Image from "next/image";
+"use client";
+
+import React, { useEffect } from "react";
+import dynamic from "next/dynamic";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { AudioProvider } from "../components/AudioContext";
+
+// Dynamic imports to avoid SSR issues with Three.js and canvas
+const RedParticleBackground = dynamic(
+  () => import("../components/RedParticleBackground"),
+  { ssr: false }
+);
+const GlitchOverlay = dynamic(
+  () => import("../components/GlitchOverlay"),
+  { ssr: false }
+);
+const ScrollProgressIndicator = dynamic(
+  () => import("../components/ScrollProgressIndicator"),
+  { ssr: false }
+);
+const StarsBackground = dynamic(
+  () => import("../components/StarsBackground"),
+  { ssr: false }
+);
+
+// Sections
+const Section1BlackVoid = dynamic(
+  () => import("../components/sections/Section1BlackVoid"),
+  { ssr: false }
+);
+const Section2NotACourse = dynamic(
+  () => import("../components/sections/Section2NotACourse"),
+  { ssr: false }
+);
+const Section3ArenaReveal = dynamic(
+  () => import("../components/sections/Section3ArenaReveal"),
+  { ssr: false }
+);
+const Section4P3Model = dynamic(
+  () => import("../components/sections/Section4P3Model"),
+  { ssr: false }
+);
+const Section5Matchmaking = dynamic(
+  () => import("../components/sections/Section5Matchmaking"),
+  { ssr: false }
+);
+const Section6SprintArena = dynamic(
+  () => import("../components/sections/Section6SprintArena"),
+  { ssr: false }
+);
+const Section7FocusEnforcement = dynamic(
+  () => import("../components/sections/Section7FocusEnforcement"),
+  { ssr: false }
+);
+const Section8Rewards = dynamic(
+  () => import("../components/sections/Section8Rewards"),
+  { ssr: false }
+);
+const Section9Certificates = dynamic(
+  () => import("../components/sections/Section9Certificates"),
+  { ssr: false }
+);
+const Section10Profile = dynamic(
+  () => import("../components/sections/Section10Profile"),
+  { ssr: false }
+);
+const Section11Recruitment = dynamic(
+  () => import("../components/sections/Section11Recruitment"),
+  { ssr: false }
+);
+const Section12LogoFinale = dynamic(
+  () => import("../components/sections/Section12LogoFinale"),
+  { ssr: false }
+);
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  useEffect(() => {
+    // Refresh ScrollTrigger after all components mount
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
+
+    // Prevent copy and context menu for a fully cinematic feel
+    const preventAction = (e: Event) => e.preventDefault();
+    document.addEventListener("copy", preventAction);
+    document.addEventListener("contextmenu", preventAction);
+
+    return () => {
+      clearTimeout(timer);
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+      document.removeEventListener("copy", preventAction);
+      document.removeEventListener("contextmenu", preventAction);
+    };
+  }, []);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+    <AudioProvider>
+      <main
+        style={{
+          position: "relative",
+          background: "#000000",
+          minHeight: "100vh",
+        }}
+      >
+        <RedParticleBackground />
+        <StarsBackground factor={0.05} speed={80} starColor="#FF0033" />
+        <GlitchOverlay />
+        <ScrollProgressIndicator />
+
+        {/* Sections */}
+        <div style={{ position: "relative", zIndex: 2 }}>
+          <Section1BlackVoid />
+          <Section2NotACourse />
+          <Section3ArenaReveal />
+          <Section4P3Model />
+          <Section5Matchmaking />
+          <Section6SprintArena />
+          <Section7FocusEnforcement />
+          <Section8Rewards />
+          <Section9Certificates />
+          <Section10Profile />
+          <Section11Recruitment />
+          <Section12LogoFinale />
         </div>
       </main>
-    </div>
+    </AudioProvider>
   );
 }

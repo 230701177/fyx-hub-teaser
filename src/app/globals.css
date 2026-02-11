@@ -1,26 +1,672 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
 @import "tailwindcss";
 
+/* ===== CSS Custom Properties ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --red-primary: #FF0033;
+  --red-dark: #7A0018;
+  --red-glow: rgba(255, 0, 51, 0.5);
+  --red-glow-light: rgba(255, 0, 51, 0.15);
+  --red-glow-subtle: rgba(255, 0, 51, 0.08);
+  --text-primary: #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.3);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --font-headline: 'Orbitron', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ===== Base Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: auto;
+  overflow-x: hidden;
+  background: var(--bg-primary);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--red-dark);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--red-primary);
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--red-primary);
+  color: white;
+}
+
+/* ===== Typography ===== */
+.font-headline {
+  font-family: var(--font-headline);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-code {
+  font-family: var(--font-code);
+}
+
+/* ===== Glass Panel ===== */
+.glass-panel {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px;
+}
+
+.glass-panel-strong {
+  background: rgba(255, 0, 51, 0.03);
+  border: 1px solid rgba(255, 0, 51, 0.1);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 16px;
+}
+
+/* ===== Red Glow Effects ===== */
+.red-glow {
+  text-shadow: 0 0 20px var(--red-glow), 0 0 40px var(--red-glow-light);
+}
+
+.red-glow-strong {
+  text-shadow: 0 0 30px var(--red-glow), 0 0 60px var(--red-glow), 0 0 100px var(--red-glow-light);
+}
+
+.red-glow-box {
+  box-shadow: 0 0 30px var(--red-glow-light), 0 0 60px var(--red-glow-subtle), inset 0 0 30px var(--red-glow-subtle);
+}
+
+.red-border-glow {
+  border: 1px solid rgba(255, 0, 51, 0.3);
+  box-shadow: 0 0 15px var(--red-glow-light), inset 0 0 15px var(--red-glow-subtle);
+}
+
+/* ===== Scanline Overlay ===== */
+.scanline-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline-overlay::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 0, 51, 0.02) 2px,
+      rgba(255, 0, 51, 0.02) 4px);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ===== Glitch Effect ===== */
+@keyframes glitch-1 {
+
+  0%,
+  100% {
+    clip-path: inset(0 0 95% 0);
+    transform: translate(0);
+  }
+
+  10% {
+    clip-path: inset(20% 0 60% 0);
+    transform: translate(-3px, 2px);
+  }
+
+  20% {
+    clip-path: inset(50% 0 30% 0);
+    transform: translate(3px, -1px);
+  }
+
+  30% {
+    clip-path: inset(10% 0 70% 0);
+    transform: translate(-2px, 1px);
+  }
+
+  40% {
+    clip-path: inset(80% 0 5% 0);
+    transform: translate(1px, -2px);
+  }
+
+  50% {
+    clip-path: inset(40% 0 40% 0);
+    transform: translate(-1px, 2px);
+  }
+}
+
+@keyframes glitch-2 {
+
+  0%,
+  100% {
+    clip-path: inset(95% 0 0 0);
+    transform: translate(0);
+  }
+
+  10% {
+    clip-path: inset(60% 0 20% 0);
+    transform: translate(3px, -2px);
+  }
+
+  20% {
+    clip-path: inset(30% 0 50% 0);
+    transform: translate(-3px, 1px);
+  }
+
+  30% {
+    clip-path: inset(70% 0 10% 0);
+    transform: translate(2px, -1px);
+  }
+
+  40% {
+    clip-path: inset(5% 0 80% 0);
+    transform: translate(-1px, 2px);
+  }
+
+  50% {
+    clip-path: inset(40% 0 40% 0);
+    transform: translate(1px, -2px);
+  }
+}
+
+.glitch-text {
+  position: relative;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch-text::before {
+  color: var(--red-primary);
+  animation: glitch-1 3s infinite linear alternate-reverse;
+  z-index: -1;
+}
+
+.glitch-text::after {
+  color: #00ffff;
+  animation: glitch-2 2s infinite linear alternate-reverse;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+/* ===== Pulse Heartbeat ===== */
+@keyframes heartbeat-pulse {
+
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
+}
+
+.heartbeat-bg {
+  animation: heartbeat-pulse 2s ease-in-out infinite;
+}
+
+/* ===== Floating Animation ===== */
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.floating {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* ===== Fade In Up ===== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* ===== Red Mist ===== */
+@keyframes mist-drift {
+  0% {
+    transform: translateX(-10%) translateY(0);
+    opacity: 0.3;
+  }
+
+  50% {
+    transform: translateX(10%) translateY(-5%);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: translateX(-10%) translateY(0);
+    opacity: 0.3;
+  }
+}
+
+/* ===== CTA Button ===== */
+.cta-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--red-primary), var(--red-dark));
+  color: white;
+  font-family: var(--font-headline);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.cta-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.cta-button:hover {
+  box-shadow: 0 0 30px var(--red-glow), 0 0 60px var(--red-glow-light);
+  transform: translateY(-2px);
+}
+
+.cta-button:hover::before {
+  transform: translateX(100%);
+}
+
+/* ===== Logo Glitch & Glow Animations ===== */
+.logo-glitch {
+  position: relative;
+}
+
+.logo-glitch::before,
+.logo-glitch::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  opacity: 0.5;
+  z-index: -1;
+}
+
+@keyframes logo-flicker {
+  0% {
+    opacity: 0.8;
+  }
+
+  5% {
+    opacity: 0.4;
+    filter: contrast(150%) brightness(150%);
+  }
+
+  10% {
+    opacity: 0.9;
+  }
+
+  15% {
+    opacity: 0.2;
+  }
+
+  20% {
+    opacity: 1;
+    filter: contrast(100%) brightness(100%);
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0.3;
+  }
+
+  95% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.9;
+  }
+}
+
+.logo-glitch {
+  animation: logo-flicker 4s linear infinite;
+}
+
+.logo-glow-pulse {
+  animation: logo-glow-anim 2s ease-in-out infinite alternate;
+}
+
+@keyframes logo-glow-anim {
+  from {
+    transform: scale(0.95);
+    opacity: 0.1;
+  }
+
+  to {
+    transform: scale(1.05);
+    opacity: 0.4;
+  }
+}
+
+/* ===== Section Base ===== */
+.cinema-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ===== Counter Roll ===== */
+@keyframes counter-roll {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.counter-animate {
+  animation: counter-roll 0.5s ease-out forwards;
+}
+
+/* ===== Warning Shake ===== */
+@keyframes warning-shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.shake {
+  animation: warning-shake 0.5s ease-in-out;
+}
+
+/* ===== Circuit Pulse ===== */
+@keyframes circuit-pulse {
+  0% {
+    stroke-dashoffset: 100;
+    opacity: 0.3;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+}
+
+/* ===== Typing Cursor ===== */
+@keyframes blink-cursor {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: blink-cursor 1s step-end infinite;
+}
+
+/* ===== Flame Effect ===== */
+@keyframes flame-flicker {
+
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.8;
+  }
+
+  25% {
+    transform: scaleY(1.1) scaleX(0.95);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scaleY(0.95) scaleX(1.05);
+    opacity: 0.7;
+  }
+
+  75% {
+    transform: scaleY(1.05) scaleX(0.98);
+    opacity: 0.9;
+  }
+}
+
+.flame {
+  animation: flame-flicker 0.3s ease-in-out infinite;
+}
+
+/* ===== Progress Bar ===== */
+.progress-fill {
+  background: linear-gradient(90deg, var(--red-dark), var(--red-primary));
+  box-shadow: 0 0 10px var(--red-glow);
+  transition: width 1s ease-out;
+}
+
+/* ===== Scroll Progress Indicator ===== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--red-dark), var(--red-primary), var(--red-dark));
+  box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow-light);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ===== Red Alert Border ===== */
+@keyframes alert-border {
+
+  0%,
+  100% {
+    border-color: transparent;
+  }
+
+  50% {
+    border-color: var(--red-primary);
+  }
+}
+
+.alert-border-flash {
+  animation: alert-border 0.5s ease-in-out 3;
+}
+
+/* ===== Elimination Fade ===== */
+@keyframes elimination-fade {
+  0% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    filter: brightness(0.5) saturate(0);
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(0) saturate(0);
+    transform: scale(0.8);
+  }
+}
+
+/* ===== Certificate Rotate ===== */
+@keyframes cert-float {
+
+  0%,
+  100% {
+    transform: perspective(800px) rotateY(-5deg) rotateX(2deg);
+  }
+
+  50% {
+    transform: perspective(800px) rotateY(5deg) rotateX(-2deg);
+  }
+}
+
+.cert-float {
+  animation: cert-float 6s ease-in-out infinite;
+}
+
+/* ===== Laser Scan ===== */
+@keyframes laser-scan {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+
+  100% {
+    top: 100%;
+    opacity: 0.5;
+  }
+}
+
+/* ===== Audio Toggle ===== */
+.audio-toggle {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 9999;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.audio-toggle:hover {
+  border-color: rgba(255, 0, 51, 0.3);
+  box-shadow: 0 0 20px var(--red-glow-light);
+}
+
+/* Audio bars animation */
+.audio-bar {
+  width: 3px;
+  background: var(--red-primary);
+  margin: 0 1px;
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .cinema-section {
+    padding: 20px;
+  }
 }
